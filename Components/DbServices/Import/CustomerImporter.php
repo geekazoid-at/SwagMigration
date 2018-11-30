@@ -183,7 +183,7 @@ class CustomerImporter
         }
 
         foreach ($customer['addresses'] as $address) {
-            $address = $this->prepareAddressData($address);
+            $address = $this->prepareAddressData($address, $customer);
             $address['user_id'] = $customer['userID'];
             if ($address['salutation'] === null) {
                 $address['salutation'] = $customer['billing_salutation'];
@@ -599,7 +599,7 @@ class CustomerImporter
      *
      * @return array
      */
-    private function prepareAddressData(array $address)
+    private function prepareAddressData(array $address, $customer)
     {
         if (isset($address['company'])) {
             $address['company'] = $this->db->quote((string) $address['company']);
@@ -625,8 +625,11 @@ class CustomerImporter
         if (isset($address['city'])) {
             $address['city'] = $this->db->quote((string) $address['city']);
         }
+		
         if (isset($address['countryID'])) {
             $address['country_id'] = (int) $this->getCountryID($address['countryID']);
+        } else if (isset($customer['billing_countryID'])) {
+            $address['country_id'] = $customer['billing_countryID'];
         } else {
             $address['country_id'] = $this->getDefaultCountryId();
         }

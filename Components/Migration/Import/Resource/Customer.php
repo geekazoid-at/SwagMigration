@@ -139,13 +139,21 @@ class Customer extends AbstractResource
      */
     private function migrateCustomer($customer, $import, $salt)
     {
-        if (isset($customer['customergroupID'])
-            && isset($this->Request()->customer_group[$customer['customergroupID']])
-        ) {
-            $customer['customergroup'] = $this->Request()->customer_group[$customer['customergroupID']];
-        }
-        unset($customer['customergroupID']);
-
+		$groupToUse = 'EK';
+		if($customer['customergroupID'] == 1) {
+			$groupToUse = 'EK';
+		}
+		else if($customer['customergroupID'] == 5) {
+			$groupToUse = 'UK14';
+		}
+		else if($customer['customergroupID'] == 7) {
+			$groupToUse = 'SKB10';
+		}
+		else if($customer['customergroupID'] == 13) {
+			$groupToUse = 'FKB';
+		}
+		$customer['customergroup'] = $groupToUse;
+		
         $customer['subshopID'] = 1;
         if (isset($customer['subshopID']) && isset($this->Request()->shop[$customer['subshopID']])) {
             $customer['subshopID'] = $this->Request()->shop[$customer['subshopID']];
@@ -155,13 +163,14 @@ class Customer extends AbstractResource
             $customer['language'] = $this->Request()->language[$customer['language']];
         }
 
-        if (!empty($customer['billing_countryiso'])) {
+        if (!empty($customer['billing_country'])) {
             $sql = 'SELECT `id` FROM `s_core_countries` WHERE `countryiso` = ?';
-            $customer['billing_countryID'] = (int) Shopware()->Db()->fetchOne($sql, [$customer['billing_countryiso']]);
+            $customer['billing_countryID'] = (int) Shopware()->Db()->fetchOne($sql, [$customer['billing_country']]);
         }
-        if (isset($customer['shipping_countryiso'])) {
+		
+        if (isset($customer['billing_country'])) {
             $sql = 'SELECT `id` FROM `s_core_countries` WHERE `countryiso` = ?';
-            $customer['shipping_countryID'] = (int) Shopware()->Db()->fetchOne($sql, [$customer['shipping_countryiso']]);
+            $customer['shipping_countryID'] = (int) Shopware()->Db()->fetchOne($sql, [$customer['billing_country']]);
         }
 
         if (!isset($customer['paymentID'])) {
