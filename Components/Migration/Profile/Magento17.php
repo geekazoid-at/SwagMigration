@@ -156,41 +156,81 @@ class Magento17 extends Profile
      *
      * @return string
      */
-    public function getProductPropertiesSelect($id)
-    {
-        return "
-            SELECT
+public function getProductPropertiesSelect($id)
+{
+    return "
+    SELECT * FROM
+    (SELECT
 
-				p.entity_id                             as productID,
-                eav.attribute_code                      as 'option',
-                option_value.value                      as 'value'
+    p.entity_id                             as productID,
+    eav.attribute_code                      as 'option',
+    option_value.value                      as 'value'
 
-            -- The actual product
-            FROM  {$this->quoteTable('catalog_product_entity')} p
+    -- The actual product
+    FROM  {$this->quoteTable('catalog_product_entity')} as p
 
-            -- Maps Articles to attributes
-            INNER JOIN {$this->quoteTable('catalog_product_entity_int')} entity_int
-            ON entity_int.entity_id=p.entity_id
+    -- Maps Articles to attributes
+    INNER JOIN {$this->quoteTable('catalog_product_entity_varchar')} entity_varchar
+    ON entity_varchar.entity_id=p.entity_id
 
-            -- Actual attributes (groups) with names
-            INNER JOIN {$this->quoteTable('eav_attribute')} eav
-            ON eav.attribute_id=entity_int.attribute_id
-            AND eav.is_user_defined=1
+    -- Actual attributes (groups) with names
+    INNER JOIN {$this->quoteTable('eav_attribute')} eav
+    ON eav.attribute_id=entity_varchar.attribute_id
+    -- AND eav.is_user_defined=1
 
-			-- Only get filterable attributes
-			INNER JOIN {$this->quoteTable('catalog_eav_attribute')} eav_settings
-			ON eav_settings.attribute_id = eav.attribute_id
-			AND eav_settings.is_filterable = 1
+    -- Only get filterable attributes
+    INNER JOIN {$this->quoteTable('catalog_eav_attribute')} eav_settings
+    ON eav_settings.attribute_id = eav.attribute_id
+    -- AND eav_settings.is_filterable = 1
 
-            -- Joins article option relation
-            INNER  JOIN {$this->quoteTable('eav_attribute_option_value')} option_value
-            ON option_value.option_id=entity_int.value
-            AND option_value.store_id=0
+    -- Joins article option relation
+    INNER  JOIN {$this->quoteTable('eav_attribute_option_value')} option_value
+    ON option_value.option_id=entity_varchar.value
+    AND option_value.store_id=0
 
-            WHERE p.entity_type_id =  {$this->getEntityTypeId('catalog_product')}
-            AND p.entity_id = {$id}
-		";
-    }
+    WHERE eav.frontend_input LIKE '%select'
+    AND NOT eav.attribute_code LIKE 'msrp%'
+    AND NOT eav.attribute_code = 'wts_gc_type'
+    AND p.entity_id = {$id}
+
+    UNION
+
+    SELECT
+
+    p.entity_id                             as productID,
+    eav.attribute_code                      as 'option',
+    option_value.value                      as 'value'
+
+    -- The actual product
+    FROM  {$this->quoteTable('catalog_product_entity')} as p
+
+    -- Maps Articles to attributes
+    INNER JOIN {$this->quoteTable('catalog_product_entity_int')} entity_int
+    ON entity_int.entity_id=p.entity_id
+
+    -- Actual attributes (groups) with names
+    INNER JOIN {$this->quoteTable('eav_attribute')} eav
+    ON eav.attribute_id=entity_int.attribute_id
+    -- AND eav.is_user_defined=1
+
+    -- Only get filterable attributes
+    INNER JOIN {$this->quoteTable('catalog_eav_attribute')} eav_settings
+    ON eav_settings.attribute_id = eav.attribute_id
+    -- AND eav_settings.is_filterable = 1
+
+    -- Joins article option relation
+    INNER  JOIN {$this->quoteTable('eav_attribute_option_value')} option_value
+    ON option_value.option_id=entity_int.value
+    AND option_value.store_id=0
+
+    WHERE NOT eav.attribute_code = 'visibility'
+    AND NOT eav.attribute_code = 'tax_class_id'
+    AND NOT eav.attribute_code = 'status'
+    AND NOT eav.attribute_code = 'manufacturer'
+    AND NOT eav.attribute_code = 'enable_googlecheckout'
+    AND NOT eav.attribute_code = 'alkohol'
+    AND p.entity_id = {$id}) as x";
+}
 
     /**
      * Returns the entity type id for a given type
