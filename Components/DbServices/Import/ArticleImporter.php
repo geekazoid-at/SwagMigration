@@ -1046,6 +1046,28 @@ class ArticleImporter
                 $columns = ', ' . implode(', ', array_keys($article['attr']));
                 $values = ', ' . implode(', ', $article['attr']);
             }
+
+			$kkk = [];
+			$vvv = [];
+
+			foreach ($article as $key => $value) {
+				if(substr( $key, 0, 8 ) != "article_" || $value === NULL || $value === "") {
+					continue;
+				}
+				$vvvvv = $value;
+				if(strcmp($key, "article_medi_alkohol") != 0) {
+					$vvvvv = "\"" . str_replace("\"", "\\\"", $vvvvv) . "\"";
+				}
+
+				array_push($kkk, $key);
+				array_push($vvv, $vvvvv);
+			}
+
+			if(sizeof($kkk)) {
+				$columns = ", " . implode(', ', $kkk);
+				$values = ", " . implode(', ', $vvv);
+			}
+
             $sql = "INSERT INTO s_articles_attributes
                     (articleID, articledetailsID $columns) VALUES
                     ({$article['articleID']}, {$article['articledetailsID']} $values)";
