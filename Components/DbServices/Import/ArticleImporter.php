@@ -122,8 +122,6 @@ class ArticleImporter
      */
     public function import(array $article)
     {
-        error_log("yyy " . print_r($article, TRUE));
-
         // OrderNumber is required. Create a new one if its empty
         if (empty($article['ordernumber'])) {
             $prefix = Shopware()->Config()->backendAutoOrderNumberPrefix;
@@ -552,9 +550,6 @@ class ArticleImporter
     private function prepareArticleData(array $article)
     {
         if (isset($article['name'])) {
-            error_log("xxx1 " . print_r($article['name'], TRUE));
-            error_log("xxx2 " . (string) $article['name']);
-            error_log("xxx3 " . $this->db->quote((string) $article['name']));
             $article['name'] = $this->db->quote((string) $article['name']);
         }
         if (isset($article['shippingtime'])) {
@@ -936,8 +931,6 @@ class ArticleImporter
 
             $insertFields = [];
             $insertValues = [];
-
-            // error_log(print_r($article, TRUE));
 
             foreach ($this->articleFields as $field) {
                 if (isset($article[$field])) {
