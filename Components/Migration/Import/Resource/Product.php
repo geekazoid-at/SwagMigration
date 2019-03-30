@@ -274,6 +274,7 @@ class Product extends AbstractResource
         }
 
         //Article
+        error_log(print_r($product, TRUE));
         $product_result = $import->article($product);
 
         if (!empty($product_result)) {

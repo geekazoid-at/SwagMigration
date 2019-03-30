@@ -550,7 +550,7 @@ class ArticleImporter
     private function prepareArticleData(array $article)
     {
         if (isset($article['name'])) {
-            error_log("xxx " . $this->toString($article['name']));
+            // error_log("xxx " . $this->toString($article['name']));
             $article['name'] = $this->db->quote($this->toString($article['name']));
         }
         if (isset($article['shippingtime'])) {
