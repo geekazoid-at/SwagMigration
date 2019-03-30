@@ -122,6 +122,8 @@ class ArticleImporter
      */
     public function import(array $article)
     {
+        error_log("yyy " . print_r($article, TRUE));
+
         // OrderNumber is required. Create a new one if its empty
         if (empty($article['ordernumber'])) {
             $prefix = Shopware()->Config()->backendAutoOrderNumberPrefix;
