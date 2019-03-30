@@ -550,6 +550,7 @@ class ArticleImporter
     private function prepareArticleData(array $article)
     {
         if (isset($article['name'])) {
+            error_log("xxx " . $this->toString($article['name']));
             $article['name'] = $this->db->quote($this->toString($article['name']));
         }
         if (isset($article['shippingtime'])) {
@@ -932,7 +933,7 @@ class ArticleImporter
             $insertFields = [];
             $insertValues = [];
 
-            error_log(print_r($article, TRUE));
+            // error_log(print_r($article, TRUE));
 
             foreach ($this->articleFields as $field) {
                 if (isset($article[$field])) {
