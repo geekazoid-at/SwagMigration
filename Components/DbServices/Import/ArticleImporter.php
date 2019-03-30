@@ -932,7 +932,7 @@ class ArticleImporter
             $insertFields = [];
             $insertValues = [];
 
-            error_log(print_r($article));
+            error_log(print_r($article, TRUE));
 
             foreach ($this->articleFields as $field) {
                 if (isset($article[$field])) {
