@@ -94,7 +94,7 @@ class Property extends AbstractResource
                 }
                 $groupName = $property['group'];
                 
-                error_log("xxxyyyxxx " . $groupName . " " . $property['value']);
+                error_log("xxxyyyxxx " . print_r($property, TRUE));
                 if($groupName == "produktart_medis") {
                     $groupName = "produktart";
                 }
