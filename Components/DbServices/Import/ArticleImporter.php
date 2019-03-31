@@ -1058,11 +1058,7 @@ class ArticleImporter
 				$vvvvv = $value;
 				if(strcmp($key, "article_medi_alkohol") != 0) {
 					$vvvvv = "\"" . str_replace("\"", "\\\"", $vvvvv) . "\"";
-                }
-                
-                if($key == "produktart_medis") {
-                    $key = "produktart";
-                }
+				}
 
 				array_push($kkk, $key);
 				array_push($vvv, $vvvvv);
