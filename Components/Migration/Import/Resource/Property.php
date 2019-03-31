@@ -78,27 +78,27 @@ class Property extends AbstractResource
 
             // Build nested array of properties
             while ($property = $property_result->fetch()) {
+                $option = $property['option'];
+                if($option == "produktart_medis") {
+                    $option = "produktart";
+                }
+
                 // Skip empty properties
-                if (empty($property['option']) || empty($property['value'])) {
+                if (empty($option) || empty($property['value'])) {
                     continue;
                 }
 
                 // In SW a product can only have *ONE* property group associated
                 if (empty($property['group'])
-                    && isset($this->Request()->property_options[$property['option']])
-                    && !empty($this->Request()->property_options[$property['option']])
+                    && isset($this->Request()->property_options[$option])
+                    && !empty($this->Request()->property_options[$option])
                 ) {
-                    $property['group'] = $this->Request()->property_options[$property['option']];
+                    $property['group'] = $this->Request()->property_options[$option];
                 } elseif (empty($property['group'])) {
                     $property['group'] = 'Properties';
                 }
                 $groupName = $property['group'];
                 
-                $option = $propery['option'];
-                if($option == "produktart_medis") {
-                    $option = "produktart";
-                }
-
                 // Create new element or extend existing
                 if (!array_key_exists($option, $options)) {
                     $options[$option] = ['name' => $option, 'values' => [['value' => $property['value']]]];
