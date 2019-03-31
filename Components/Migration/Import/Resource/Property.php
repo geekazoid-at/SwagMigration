@@ -94,6 +94,10 @@ class Property extends AbstractResource
                 }
                 $groupName = $property['group'];
 
+                if($groupName == "produktart_medis") {
+                    $groupName = "produktart";
+                }
+
                 // Create new element or extend existing
                 if (!array_key_exists($property['option'], $options)) {
                     $options[$property['option']] = ['name' => $property['option'], 'values' => [['value' => $property['value']]]];
