@@ -1043,10 +1043,6 @@ class ArticleImporter
                     WHERE articledetailsID = {$article['articledetailsID']}";
             $this->db->query($sql);
         } else {
-            // beduerfnisse_medi + _mehrfach
-            // Spaeter vielleicht: eigenschaft_mehrfach + eigenschaftmedi
-            // produktart + produktart_medis
-
             if (!empty($article['attr'])) {
                 $columns = ', ' . implode(', ', array_keys($article['attr']));
                 $values = ', ' . implode(', ', $article['attr']);

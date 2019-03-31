@@ -78,9 +78,14 @@ class Property extends AbstractResource
 
             // Build nested array of properties
             while ($property = $property_result->fetch()) {
+                // Spaeter vielleicht: eigenschaft_mehrfach + eigenschaftmedi
+                
                 $option = $property['option'];
                 if($option == "produktart_medis") {
                     $option = "produktart";
+                }
+                else if ($option == "beduerfnisse_medi") {
+                    $option = "beduerfnisse_mehrfach";
                 }
 
                 // Skip empty properties
