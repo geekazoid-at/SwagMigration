@@ -94,16 +94,16 @@ class Property extends AbstractResource
                 }
                 $groupName = $property['group'];
                 
-                error_log("xxxyyyxxx " . print_r($property, TRUE));
-                if($groupName == "produktart_medis") {
-                    $groupName = "produktart";
+                $option = $propery['option'];
+                if($option == "produktart_medis") {
+                    $option = "produktart";
                 }
 
                 // Create new element or extend existing
-                if (!array_key_exists($property['option'], $options)) {
-                    $options[$property['option']] = ['name' => $property['option'], 'values' => [['value' => $property['value']]]];
+                if (!array_key_exists($option, $options)) {
+                    $options[$option] = ['name' => $option, 'values' => [['value' => $property['value']]]];
                 } else {
-                    $options[$property['option']]['values'][] = ['value' => $property['value']];
+                    $options[$option]['values'][] = ['value' => $property['value']];
                 }
             }
 
