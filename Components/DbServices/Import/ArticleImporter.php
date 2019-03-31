@@ -859,7 +859,7 @@ class ArticleImporter
      */
     private function getSupplierIdByName($supplierName)
     {
-        $supplier['name'] = $this->db->quote($this->toString($supplierName));
+        $supplier['name'] = $this->db->quote((string) $supplierName);
 
         $sql = "SELECT id, img, link FROM s_articles_supplier WHERE name = {$supplier['name']}";
         $supplierData = $this->db->fetchRow($sql);
