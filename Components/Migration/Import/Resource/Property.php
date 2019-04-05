@@ -12,6 +12,62 @@ use Shopware\SwagMigration\Components\Migration\Import\Progress;
 
 class Property extends AbstractResource
 {
+    private $groupToGroupMapping = [
+        "beduerfnisse_medi" => "beduerfnisse_mehrfach",
+        "produktart_medis" => "produktart",
+    ];
+    
+    private $propToGroupMapping = [
+        "Duft" => "produktart",
+        "Deo" => "produktart",
+        "Laktose frei" => "Zusätze",
+        "feuchtigkeitsspendend" => "eigenschaft_mehrfach",
+        "wasserfest" => "eigenschaft_mehrfach",
+        "nicht fettend" => "eigenschaft_mehrfach",
+        "ohne Duftstoffe" => "Zusätze",
+        "für Babys geeignet" => "Geeignet für",
+        "rückfettend" => "eigenschaft_mehrfach",
+        "ohne Konservierungsstoffe" => "Zusätze",
+        "ohne Parabene" => "Zusätze",
+        "ohne Farbstoffe" => "Zusätze",
+        "für Kontaktlinsenträger" => "Geeignet für",
+        "ölfrei" => "eigenschaft_mehrfach",
+        "mattierend" => "eigenschaft_mehrfach",
+        "getönt" => "eigenschaft_mehrfach",
+        "ohne Alkohol" => "Zusätze",
+        "nicht komedogen" => "eigenschaft_mehrfach",
+        "Make-Up Grundlage" => "eigenschaft_mehrfach",
+        "ohne Aluminiumsalze" => "Zusätze",
+        "Antitranspirant" => "eigenschaft_mehrfach",
+        "nicht klebend" => "eigenschaft_mehrfach",
+        "ohne Silikone" => "Zusätze",
+        "photostabil" => "eigenschaft_mehrfach",
+        "Sonnenallergie" => "Krankheitsbild",
+        "Neurodermitis" => "Krankheitsbild",
+        "Rosazea" => "Krankheitsbild",
+        "für Diabetiker geeignet" => "Geeignet für",
+        "gegen fettige Schuppen" => "Bedürfnisse",
+        "gegen Haarausfall" => "Bedürfnisse",
+        "Flöhe" => "Bedürfnisse",
+        "Zecken" => "Bedürfnisse",
+        "Pigmentflecken" => "Bedürfnisse",
+        "für Kinder geeignet" => "Geeignet für",
+        "gereizte Kopfhaut" => "Bedürfnisse",
+        "für Schwangere geeignet" => "Geeignet für",
+        "während der Stillzeit geeignet" => "Geeignet für",
+        "Gluten frei" => "Zusätze",
+        "Kinderwunsch" => "Bedürfnisse",
+        "mehr Volumen" => "Bedürfnisse",
+        "gegen trockene Schuppen" => "Bedürfnisse",
+        "vegetarisch" => "eigenschaftmedi",
+        "vegan" => "eigenschaftmedi",
+        "Akne" => "Krankheitsbild",
+        "fruktosefrei" => "Zusätze",
+        "juckende Kopfhaut" => "Bedürfnisse",
+        "schuppende Kopfhaut" => "Bedürfnisse",
+        "Psoriasis" => "Krankheitsbild",
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -78,19 +134,22 @@ class Property extends AbstractResource
 
             // Build nested array of properties
             while ($property = $property_result->fetch()) {
-                // Spaeter vielleicht: eigenschaft_mehrfach + eigenschaftmedi
-                
                 $option = $property['option'];
-                if($option == "produktart_medis") {
-                    $option = "produktart";
-                }
-                else if ($option == "beduerfnisse_medi") {
-                    $option = "beduerfnisse_mehrfach";
-                }
 
                 // Skip empty properties
                 if (empty($option) || empty($property['value'])) {
                     continue;
+                }
+
+                $newOption = $this->groupToGroupMapping[$option];
+                $newOption2 = $this->propToGroupMapping[$property['value']];
+
+                if($newOption !== NULL) {
+                    $option = $newOption;
+                }
+                
+                if($newOption2 !== NULL) {
+                    $option = $newOption2;
                 }
 
                 // In SW a product can only have *ONE* property group associated
