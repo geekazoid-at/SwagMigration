@@ -28,6 +28,7 @@ class Property extends AbstractResource
         "für Babys geeignet" => "Geeignet für",
         "rückfettend" => "eigenschaft_mehrfach",
         "ohne Konservierungsstoffe" => "Zusätze",
+        "anti-aging" => "Bedürfnisse",
         "ohne Parabene" => "Zusätze",
         "ohne Farbstoffe" => "Zusätze",
         "für Kontaktlinsenträger" => "Geeignet für",
