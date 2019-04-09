@@ -203,8 +203,8 @@ class ImageImporter
      */
     private function copyImage($image, $name)
     {
-        $uploadDir = Shopware()->Container()->getParameter('shopware.app.rootdir') . 'media/temp';
-
+        $uploadDir = Shopware()->Container()->getParameter('shopware.app.rootdir') . 'media/temp/';
+     
         $ext = '';
         if (!empty($image)) {
             foreach (['.png', '.gif', '.jpg'] as $extension) {
